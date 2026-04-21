@@ -152,7 +152,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel11.setText("Categoría de la Tarjeta:");
 
-        jButton3.setText("Registrar");
+        jButton3.setText("Buscar");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -253,13 +253,28 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel13.setText("PRE-ORDEN:");
 
+        jTextField8.setEditable(false);
+        jTextField8.setFocusable(false);
+
         jLabel14.setText("POST-ORDEN:");
+
+        jTextField9.setEditable(false);
+        jTextField9.setFocusable(false);
 
         jLabel15.setText("IN-ORDEN:");
 
+        jTextField10.setEditable(false);
+        jTextField10.setFocusable(false);
+
         jLabel16.setText("Cantidad de Super Héroes Registrados:");
 
+        jTextField11.setEditable(false);
+        jTextField11.setFocusable(false);
+
         jLabel17.setText("Cantidad de Super Villanos Registrados:");
+
+        jTextField12.setEditable(false);
+        jTextField12.setFocusable(false);
 
         jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel18.setText("Lista de Frases Icónicas:");
@@ -271,7 +286,16 @@ public class MainWindow extends javax.swing.JFrame {
             new String [] {
                 "Descripción"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable1.setFocusable(false);
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -363,16 +387,16 @@ public class MainWindow extends javax.swing.JFrame {
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(445, Short.MAX_VALUE)
+                .addContainerGap(448, Short.MAX_VALUE)
                 .addComponent(jLabel20)
-                .addGap(435, 435, 435))
+                .addGap(447, 447, 447))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
+                .addGap(15, 15, 15)
                 .addComponent(jLabel20)
-                .addContainerGap(238, Short.MAX_VALUE))
+                .addContainerGap(240, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -382,7 +406,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(424, 424, 424))
+                .addGap(413, 413, 413))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -394,16 +418,16 @@ public class MainWindow extends javax.swing.JFrame {
                         .addGap(76, 76, 76)
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(195, 195, 195)
+                        .addGap(197, 197, 197)
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(93, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addGap(21, 21, 21)
                 .addComponent(jLabel1)
-                .addGap(37, 37, 37)
+                .addGap(36, 36, 36)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
