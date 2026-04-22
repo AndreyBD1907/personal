@@ -6,6 +6,11 @@ public class BinarySearchTree {
     // Nodo raiz del árbol
     private Node root;
 
+    // Método constructor
+    public BinarySearchTree() {
+        this.root = null;
+    }
+    
     // Método utilizado para obtener el nodo raiz del árbol
     public Node getRoot() {
         return root;
@@ -77,30 +82,37 @@ public class BinarySearchTree {
     // Método recursivo para la eliminación de un nodo dentro del árbol
     private Node deleteRec(Node current, int id) {
         // Verifica si el nodo actual a evaluar no está vacío
-        if (current == null)
+        if (current == null) {
             return null;
+        }
         // Si el id es menor al del nodo atualmente evaluado, va a la izquierda
-        if (id < current.data.getId())
+        if (id < current.data.getId()) {
             current.left = deleteRec(current.left, id);
         // Si el id es mayor al del nodo atualmente evaluado, va a la derecha
-        else if (id > current.data.getId())
+        } else if (id > current.data.getId()) {
             current.right = deleteRec(current.right, id);
-        else
+        } else {
             // 🔴 Regla: no eliminar si es "Civiles"
-            if (current.data.getCategory().equals("Civiles"))
+            if (current.data.getCategory().equals("Civiles")) {
                 return current;
+            }
             // Caso 1: nodo hoja
-            if (current.left == null && current.right == null)
+            if (current.left == null && current.right == null) {
                 return null;
+            }
             // Caso 2: solo subárbol derecho → NO eliminar
-            if (current.left == null && current.right != null)
+            if (current.left == null && current.right != null) {
                 return current;
+            }
             // Caso 3: solo subárbol izquierdo → subirlo
-            if (current.left != null && current.right == null)
+            if (current.left != null && current.right == null) {
                 return current.left;
+            }
             // Caso 4: dos hijos → NO eliminar
-            if (current.left != null && current.right != null)
+            if (current.left != null && current.right != null) {
                 return current;
+            }
+        }
         return current;
     }
     
