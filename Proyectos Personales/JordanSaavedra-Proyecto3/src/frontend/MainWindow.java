@@ -3,20 +3,48 @@ package frontend;
 
 // Importo el resto de las clases creadas
 import backend.*;
+
 // Librería utilizada para mensajes de error
 import javax.swing.JOptionPane;
+// Librería utilizada para manipular tablas
+import javax.swing.table.DefaultTableModel;
 
 public class MainWindow extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainWindow.class.getName());
     // Árbol binario a utilizar en el programa
-    BinarySearchTree binarySearchTree = new BinarySearchTree();
-
+    private BinarySearchTree binarySearchTree = new BinarySearchTree();
+    // Panel personalizado en el que se graficará el árbol binario
+    private TreePanel treePanel;
+    
     // Método constructor
     public MainWindow() {
         initComponents();
+        // Se inicializa el treePanel anteriormente creado
+        treePanel = new TreePanel(this.binarySearchTree);
+        // Usamos BorderLayout para que ocupe todo el espacio
+        this.jPanel6.setLayout(new java.awt.BorderLayout());
+        this.jPanel6.add(treePanel, java.awt.BorderLayout.CENTER);
     }
 
+    // Método utilizado para crear un mensaje de error en caso de que un nodo
+    // del árbol binario no pudo ser eliminado
+    private String restrictionMessage(int restriction) {
+        if (restriction == this.binarySearchTree.NOT_FOUND) {
+            return "El nodo a eliminar no ha sido encontrado";
+        }
+        if (restriction == this.binarySearchTree.BLOCKED_CIVIL) {
+            return "No se puede eliminar una tarjeta de tipo Civiles";
+        }
+        if (restriction == this.binarySearchTree.BLOCKED_RIGHT_CHILD) {
+            return "No se puede eliminar un nodo con solo subárbol derecho";
+        }
+        if (restriction == this.binarySearchTree.BLOCKED_TWO_CHILDREN) {
+            return "No se puede eliminar un nodo con 2 hijos";
+        }
+        return "";
+    }
+    
     // Método que valida que un id solo tenga números
     private boolean validId(String id) {
         if (!id.matches("\\d+")) {
@@ -81,13 +109,14 @@ public class MainWindow extends javax.swing.JFrame {
             // Se realiza el proceso de inserción con los datos obtenidos. En
             // caso de que no se pueda, se le notificará al usuario
             if (!this.binarySearchTree.insert(new Card(id, description,
-                    category)))
+                    category))) {
                 JOptionPane.showMessageDialog(null,
                         "La tarjeta no pudo ser registrada", "Error",
                         JOptionPane.ERROR_MESSAGE);
-            else
-                // En caso de éxito, se limpiarán los espacios
+            // En caso de éxito, se limpiarán los espacios
+            } else {
                 cleanRegisterSpaces();
+            }
         }
     }
     
@@ -120,9 +149,91 @@ public class MainWindow extends javax.swing.JFrame {
         String id = this.jTextField5.getText().trim();
         // Si el id es válido procede con la búsqueda
         if (validId(id)) {
-            this.binarySearchTree.delete(Integer.parseInt(id));
-            // Al terminar, borra el espacio de eliminación
-            this.jTextField5.setText("");
+            // Se guarda el resultado de eliminación
+            int result = this.binarySearchTree.delete(Integer.parseInt(id));
+            // En caso de error, se reporta la excepción
+            if (result != this.binarySearchTree.DELETED) {
+                JOptionPane.showMessageDialog(null, restrictionMessage(result),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            // En caso de que se haya eliminado, se limpia el espacio
+            // correspondiente
+            } else {
+                this.jTextField5.setText("");
+            }
+        }
+    }
+    
+    // Método utilizado para limpiar los campos de "Consultas Adicionales"
+    private void cleanAditionalData() {
+        this.jTextField6.setText("");
+        this.jTextField7.setText("");
+        this.jTextField8.setText("");
+        this.jTextField9.setText("");
+        this.jTextField10.setText("");
+        this.jTextField11.setText("");
+        this.jTextField12.setText("");
+        this.jTextField13.setText("");
+        this.jTextField14.setText("");
+        this.jTextField15.setText("");
+        this.jTextField16.setText("");
+    }
+    
+    // Método utilizado para cargar las frases icónicas registradas
+    private void loadIconicPhrases() {
+        // Obtengo las frases icónicas registradas en mi árbol binario
+        String iconicPhrases = this.binarySearchTree.getLeafIconicPhrases();
+        // Creo una lista en la que tengo cada frase icónica por separado. Cada
+        // frase icónica se encuentra separada por un cambio de línea
+        String[] list = iconicPhrases.split("\n");
+        // Defino un modelo para mi tabla de frases icónicas
+        DefaultTableModel model = (DefaultTableModel) this.jTable1.getModel();
+        // Se limpia la tabla antes de comenzar a agregar filas a la tabla
+        model.setRowCount(0);
+        // Agrego todas las frases icónicas que se encuentran en la lista a
+        // partir de un ciclo foreach
+        for (String phrase : list) {
+            // Se verifica si existe una frase por agregar para no añadir filas
+            // vacías
+            if (!phrase.trim().isEmpty()) {
+                // Se añade la frase icónica en la tabla
+                model.addRow(new Object[]{phrase});
+            }
+        }
+    }
+    
+    // Método utilizado para cargar los datos de la sección "Consultas
+    // Adicionales"
+    private void loadAditionalData() {
+        // Se limpian los espacios en caso de que tengan información vieja
+        cleanAditionalData();
+        // Se imprimen los recorridos en su respectivo jTextField
+        this.jTextField8.setText(this.binarySearchTree.preOrder());
+        this.jTextField9.setText(this.binarySearchTree.postOrder());
+        this.jTextField10.setText(this.binarySearchTree.inOrder());
+        // Se imprime la cantidad de super héroes y super villanos registrados
+        this.jTextField11.setText("" +
+                this.binarySearchTree.countHeroesAndVillains("Súper héroes"));
+        this.jTextField12.setText("" +
+                this.binarySearchTree.countHeroesAndVillains("Súper villanos"));
+        // Se imprime las frases icónicas en su respectivo JTable
+        loadIconicPhrases();
+        // Se obtiene la carta con el id más pequeño registrado
+        Card minIdCard = this.binarySearchTree.findMin();
+        // Se valida que la carta tenga datos por imprimir
+        if (minIdCard != null) {
+            // Se imprimen sus datos en sus respectivos espacios
+            this.jTextField6.setText("" + minIdCard.getId());
+            this.jTextField7.setText(minIdCard.getDescription());
+            this.jTextField13.setText("" + minIdCard.getCategory());
+        }
+        // Se obtiene la carta con el id más grande registrado
+        Card maxIdCard = this.binarySearchTree.findMax();
+        // Se valida que la carta tenga datos por imprimir
+        if (maxIdCard != null) {
+            // Se imprimen sus datos en sus respectivos espacios
+            this.jTextField14.setText("" + maxIdCard.getId());
+            this.jTextField15.setText(maxIdCard.getDescription());
+            this.jTextField16.setText("" + maxIdCard.getCategory());
         }
     }
     
@@ -668,6 +779,8 @@ public class MainWindow extends javax.swing.JFrame {
     // Botón para registrar tarjetas
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         registerCard();
+        loadAditionalData();
+        this.treePanel.repaint();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     // Botón para buscar una tarjeta registrada
@@ -678,6 +791,8 @@ public class MainWindow extends javax.swing.JFrame {
     // Botón para eliminar cartas registradas
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         deleteCard();
+        loadAditionalData();
+        this.treePanel.repaint();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

@@ -1,7 +1,5 @@
-/**
- * Nodo del árbol binario de búsqueda.
- * Cada nodo contiene una tarjeta y referencias a sus hijos.
- */
+// Clase nodo del árbol binario de búsqueda donde se guardan tarjetas y
+// referencias a sus hijos.
 package backend;
 
 public class Node {
